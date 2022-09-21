@@ -27,8 +27,8 @@ jobs:
           components: rustfmt, clippy
       - name: Install cargo-make
         uses: davidB/rust-cargo-make@v1
-      - name: Install deps
-        run: sudo apt-get install -qq -y libudev-dev
+      # - name: Install deps
+      #   run: sudo apt-get install -qq -y libudev-dev
       - name: Setup cache
         uses: actions/cache@v2
         with:
