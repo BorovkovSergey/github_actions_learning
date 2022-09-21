@@ -56,4 +56,5 @@ jobs:
           prerelease: false
           files: |
             LICENSE.txt
-            *.rlib
+            target/*.rlib
+            *.alib

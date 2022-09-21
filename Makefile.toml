@@ -1,3 +1,11 @@
+[tasks.rlib]
+command = "touch"
+args = ["./target/test.rlib" ]
+
+
+[tasks.alib]
+command = "touch"
+args = ["./target/test.alib" ]
+
 [tasks.ci-flow]
-command = "cargo"
-args = ["build", "--release" ]
+dependencies = [ "rlib", "alib" ]
