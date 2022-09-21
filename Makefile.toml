@@ -1,11 +1,11 @@
 [tasks.rlib]
-command = "touch"
-args = ["./target/test.rlib" ]
+command = "cp"
+args = ["./LICENSE.txt", "./target/test.rlib" ]
 
 
 [tasks.alib]
-command = "touch"
-args = ["./target/test.alib" ]
+command = "cp"
+args = ["./LICENSE.txt", "./target/test.alib" ]
 
 [tasks.ci-flow]
 dependencies = [ "rlib", "alib" ]
