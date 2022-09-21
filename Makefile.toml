@@ -13,9 +13,17 @@ command = "mkdir"
 args = ["./target" ]
 
 [tasks.ci-flow]
-dependencies = ["mkdir", "rlib", "alib", "nightly" ]
+dependencies = ["mac_catalyst_build_x86_64", "rlib", "alib", "mac_catalyst_build_aarch64" ]
 
-[tasks.nightly]
+
+[tasks.mac_catalyst_build_x86_64]
+env = { "CARGO_FEATURE_PREFER_INTRINSICS" = 1,  "CFLAGS" = "-target x86_64-apple-ios13.4-macabi -arch x86_64 -pipe -Os -gdwarf-2  -fembed-bitcode -Werror=partial-availability" }
 command = "cargo"
 toolchain = "nightly-2022-05-19"
-args = ["build"]
+args = ["build", "--release", "-Z", "build-std", "--target", "x86_64-apple-ios-macabi", "--package", "github_actions_learning"]
+
+[tasks.mac_catalyst_build_aarch64]
+env = { "CFLAGS" = "-target aarch64-apple-ios13.4-macabi -arch arm64 -pipe -Os -gdwarf-2  -fembed-bitcode -Werror=partial-availability" }
+command = "cargo"
+toolchain = "nightly-2022-05-19"
+args = ["build", "--release", "-Z", "build-std", "--target", "aarch64-apple-ios-macabi", "--package", "github_actions_learning"]

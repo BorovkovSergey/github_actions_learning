@@ -1,0 +1,61 @@
+name: CI
+on:
+  push:
+    paths-ignore:
+      - "README.md"
+      - ".gitignore"
+  pull_request:
+    paths-ignore:
+      - "README.md"
+      - ".gitignore"
+jobs:
+  ci:
+    name: CI
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install stable rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        override: true
+    - name: Install nightly rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        profile: minimal
+        components: rustfmt, clippy
+    - name: Install nightly-2022-05-19 rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2022-05-19
+        profile: minimal
+        components: rustfmt, clippy
+    - name: Install cargo-make
+      uses: davidB/rust-cargo-make@v1
+    # - name: Install deps
+    #   run: sudo apt-get install -qq -y libudev-dev
+    - name: Setup cache # todo fix cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target/debug/build
+          target/release/build
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Install targets
+      run: rustup target add x86_64-apple-ios x86_64-apple-darwin aarch64-apple-ios-sim aarch64-apple-ios aarch64-apple-darwin
+    - name: Install nightly-2022-05-19-x86_64-apple-darwin add rust-src
+      run: rustup component add rust-src --toolchain nightly-2022-05-19
+    - name: Install lipo
+      run: cargo install cargo-lipo
+    - name: Run CI
+      uses: actions-rs/cargo@v1
+      env:
+        RUST_LOG: debug
+      with:
+        command: make
+        args: ios
