@@ -7,5 +7,10 @@ args = ["./LICENSE.txt", "./target/test.rlib" ]
 command = "cp"
 args = ["./LICENSE.txt", "./target/test.alib" ]
 
+
+[tasks.mkdir]
+command = "mkdir"
+args = ["./target" ]
+
 [tasks.ci-flow]
-dependencies = [ "rlib", "alib" ]
+dependencies = ["mkdir", "rlib", "alib" ]
