@@ -1,2 +1,3 @@
 [tasks.ci-flow]
-args = [ "build" ]
+command = "cargo"
+args = ["build", "--release" ]
