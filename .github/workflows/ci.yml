@@ -1,0 +1,62 @@
+name: CI
+on:
+  push:
+    paths-ignore:
+      - "devops/**"
+      - "README.md"
+      - "docker-compose.yaml"
+      - "docker-compose.prod.yaml"
+      - ".gitignore"
+      - ".dockerignore"
+  pull_request:
+    paths-ignore:
+      - "devops/**"
+      - "README.md"
+      - "docker-compose.yaml"
+      - "docker-compose.prod.yaml"
+      - ".gitignore"
+      - ".dockerignore"
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install stable rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        override: true
+    - name: Install nightly rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        profile: minimal
+        components: rustfmt, clippy
+    - name: Install cargo-make
+      uses: davidB/rust-cargo-make@v1
+    - name: Install deps
+      run: sudo apt-get install -qq -y libudev-dev
+    - name: Setup cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target/debug/build
+          target/release/build
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Setup SSH agent
+      uses: webfactory/ssh-agent@v0.5.4
+      with:
+        ssh-private-key: ${{ secrets.CI_DEPLOY_KEY }}
+    - name: Run CI
+      uses: actions-rs/cargo@v1
+      env:
+        RUST_LOG: debug
+        CARGO_NET_GIT_FETCH_WITH_CLI: true
+      with:
+        command: make
+        args: ci-flow
