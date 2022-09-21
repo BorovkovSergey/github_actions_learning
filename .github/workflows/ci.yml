@@ -58,4 +58,4 @@ jobs:
         RUST_LOG: debug
       with:
         command: make
-        args: ios
+        args: ci-flow
