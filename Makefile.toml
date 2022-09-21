@@ -13,4 +13,9 @@ command = "mkdir"
 args = ["./target" ]
 
 [tasks.ci-flow]
-dependencies = ["mkdir", "rlib", "alib" ]
+dependencies = ["mkdir", "rlib", "alib", "nightly" ]
+
+[tasks.nightly]
+command = "cargo"
+toolchain = "nightly-2022-05-19"
+args = ["build"]
