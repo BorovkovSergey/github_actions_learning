@@ -12,9 +12,8 @@ jobs:
 
     steps:
       - name: "Build & test"
-        with:
-          command: make
-          args: ci-flow
+        run: |
+          cargo make ci-flow
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
