@@ -1,0 +1,19 @@
+name: CI
+on:
+  pull_request:
+    paths-ignore:
+      - "README.md"
+      - ".gitignore"
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Verify Changed files
+      uses: tj-actions/verify-changed-files@v12
+      id: verify-changed-files
+      with:
+        files: |
+           changelog
