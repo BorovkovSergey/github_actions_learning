@@ -5,8 +5,8 @@ on:
       - "README.md"
       - ".gitignore"
 jobs:
-  ci:
-    name: CI
+  check_changelog_changes:
+    name: Check changelog changes
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
