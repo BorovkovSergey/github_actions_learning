@@ -17,3 +17,7 @@ jobs:
       with:
         files: |
            changelog
+    - name: Run step only when files change.
+      if: steps.verify-changed-files.outputs.files_changed == 'false'
+      run: |
+        echo "Change log file hasn't been changed" && exit 1
