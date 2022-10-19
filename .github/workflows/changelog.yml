@@ -1,4 +1,4 @@
-name: CI
+name: Check changelog changes
 on:
   pull_request:
     paths-ignore:
